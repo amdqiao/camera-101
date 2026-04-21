@@ -1,0 +1,40 @@
+{
+  "lessons": {
+    "1": {
+      "title": "Shutter Speed",
+      "description": "Shutter speed dictates how long the camera sensor is exposed to light. Fast speeds freeze action, while slow speeds blur motion.",
+      "options": ["1/4", "1/15", "1/60", "1/250", "1/1000"]
+    },
+    "2": {
+      "title": "Aperture",
+      "description": "Aperture controls the size of the lens opening. A larger aperture (smaller f-number) captures a blurry background (shallow depth of field).",
+      "options": ["f/2.8", "f/4", "f/5.6", "f/8", "f/11", "f/16"]
+    }
+  },
+  "quizzes": {
+    "1": {
+      "question": "Apply the correct settings to freeze the action and blur the background.",
+      "target_image": "cricket_target.jpg",
+      "baseline_image": "cricket_baseline.jpg",
+      "correct_shutter": "1/1000",
+      "correct_aperture": "f/2.8",
+      "draggables": ["1/15", "1/1000", "f/2.8", "f/16"]
+    },
+    "2": {
+      "question": "Apply the settings to capture heavy motion blur but keep the background sharply in focus.",
+      "target_image": "rogue_target.jpg",
+      "baseline_image": "rogue_baseline.jpg",
+      "correct_shutter": "1/15",
+      "correct_aperture": "f/16",
+      "draggables": ["1/15", "1/1000", "f/2.8", "f/16"]
+    },
+    "3": {
+      "question": "Apply the settings to isolate the subject with an extremely shallow depth of field.",
+      "target_image": "perfume_target.jpg",
+      "baseline_image": "perfume_baseline.jpg",
+      "correct_shutter": "1/250",
+      "correct_aperture": "f/2.8",
+      "draggables": ["1/250", "1/15", "f/2.8", "f/16"]
+    }
+  }
+}

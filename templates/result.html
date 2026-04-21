@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 text-center bg-white p-5 rounded shadow-sm border">
+        <h1 class="display-4 fw-bold text-primary">Quiz Complete!</h1>
+        <hr class="my-4">
+        
+        <h2 class="my-3">Your Score: <strong class="text-dark fs-1">{{ score }}</strong> <span class="text-muted">/ {{ total }}</span></h2>
+        <h4 class="mb-4 text-secondary">Quiz Time Elapsed: <span class="fw-bold text-dark">{{ time_taken }}</span></h4>
+        
+        {% if learning_times %}
+        <div class="mt-4 mb-4 text-start bg-light p-4 rounded shadow-sm border">
+            <h5 class="fw-bold text-secondary mb-3">Your Learning Breakdown:</h5>
+            <ul class="list-unstyled mb-0 fs-5">
+                {% for item in learning_times %}
+                    <li class="mb-2">⏱️ You spent <strong>{{ item.time }}</strong> learning <strong>{{ item.title }}</strong>!</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        {% if score == total %}
+            <div class="alert alert-success fs-4 py-4 shadow-sm border-0 bg-success text-white">
+                🎉 You nailed it! 
+            </div>
+        {% else %}
+            <div class="alert alert-warning fs-4 py-4 shadow-sm border-0">
+                🤔 Think again... feel free to review the lessons to perfect your skills!
+            </div>
+        {% endif %}
+        
+        <div class="mt-5">
+            <a href="/" class="btn btn-outline-primary btn-lg px-5 rounded-pill shadow-sm">Return to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

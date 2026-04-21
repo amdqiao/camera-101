@@ -1,0 +1,65 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #2c3e50;
+}
+
+.container {
+    max-width: 1000px;
+}
+
+#camera-dropzone {
+    background-color: #ffffff;
+    border: 2px dashed #cbd5e1 !important;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+#camera-dropzone.ui-droppable-hover {
+    background-color: #f1f8ff;
+    border-color: #3b82f6 !important;
+    transform: scale(1.02);
+}
+
+#main-camera-image, #learning-image {
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: opacity 0.3s ease;
+    max-height: 450px;
+}
+
+.draggable-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #475569;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    user-select: none;
+}
+
+.draggable-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    border-color: #94a3b8;
+}
+
+.btn-outline-primary {
+    border-width: 2px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.alert {
+    border-radius: 12px;
+    border: none;
+}
+
+.blurred-option {
+    filter: blur(2px);
+    opacity: 0.4;
+    pointer-events: none !important;
+    transition: all 0.3s ease;
+}

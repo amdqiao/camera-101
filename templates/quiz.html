@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 text-center">
+        <h3 class="text-primary fw-bold">Goal: Recreate This Look</h3>
+        <img src="{{ url_for('static', filename='images/' + quiz.target_image) }}" alt="Target" class="img-fluid rounded shadow-sm border border-3 border-primary" style="max-height: 200px;">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 text-center">
+        <h4 class="mb-3">{{ quiz.question }}</h4>
+        
+        <div id="camera-dropzone" class="p-3 mb-3" data-quiz-id="{{ quiz_id }}">
+            <img id="main-camera-image" src="{{ url_for('static', filename='images/' + quiz.baseline_image) }}" alt="Current Image" class="img-fluid rounded shadow-sm border border-2">
+        </div>
+        
+        <div id="feedback-container"></div>
+    </div>
+    
+    <div class="col-md-4">
+        <h4 class="text-center mb-4">Settings Dials<br><small class="text-muted fs-6">(Drag 1 Shutter Speed AND 1 Aperture)</small></h4>
+        
+        <div id="draggable-settings" class="d-flex flex-wrap justify-content-center">
+            {% for item in quiz.draggables %}
+                {% set cat = "aperture" if "f/" in item else "shutter" %}
+                
+                <div class="card m-2 p-3 draggable-item text-center bg-light fs-5 shadow-sm cat-{{ cat }}" data-value="{{ item }}" data-category="{{ cat }}" style="cursor: grab; width: 40%;">
+                    <strong>{{ item }}</strong>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row justify-content-center mt-2">
+    <div class="col-md-10 text-center">
+        <h1 class="display-5 text-primary fw-bold mb-1">Explore Your Camera</h1>
+        <p class="lead mb-3">Click on the setting you'd like to learn.</p>
+        
+        <div class="camera-map-container" style="position: relative; display: inline-block; max-width: 100%;">
+            <img src="{{ url_for('static', filename='images/top_down_camera.jpg') }}" alt="Top Down Camera" class="img-fluid rounded shadow-sm border border-2" style="max-height: 55vh; object-fit: contain;">
+            
+            <a href="/learn/2" class="camera-hotspot" style="position: absolute; top: 38%; left: 15%; width: 70%; height: 25%;" title="Learn Aperture"></a>
+            
+            <a href="/learn/1" class="camera-hotspot" style="position: absolute; top: 65%; left: 62%; width: 22%; height: 26%; border-radius: 50%;" title="Learn Shutter Speed"></a>
+        </div>
+        
+        {% if all_visited %}
+        <div class="mt-4">
+            <a href="/quiz/1" class="btn btn-outline-danger btn-lg px-5 rounded-pill shadow-sm fw-bold">Skip to Quiz</a>
+        </div>
+        {% else %}
+        <div class="mt-4">
+            <p class="text-muted small mb-0">Explore all camera dials to unlock the quiz.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .camera-hotspot {
+        border: 3px solid transparent;
+        transition: all 0.2s ease-in-out;
+        z-index: 10;
+    }
+    .camera-hotspot:hover {
+        border-color: #3b82f6;
+        background-color: rgba(59, 130, 246, 0.15);
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
