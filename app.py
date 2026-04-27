@@ -121,37 +121,43 @@ def process_drop():
     
     quiz_info = app_data["quizzes"][quiz_id]
     
-    # Determine which category the user just dropped
-    category = "aperture" if "f/" in dropped_item else "shutter"
+    # 1. Dynamically determine category
+    if "f/" in dropped_item:
+        category = "aperture"
+    elif "ISO" in dropped_item:
+        category = "iso"
+    else:
+        category = "shutter"
+        
     is_correct = False
     
-    # Validate against the correct category answer
+    # 2. Validate
     if category == "aperture" and dropped_item == quiz_info["correct_aperture"]:
         is_correct = True
     elif category == "shutter" and dropped_item == quiz_info["correct_shutter"]:
         is_correct = True
+    elif category == "iso" and dropped_item == quiz_info["correct_iso"]:
+        is_correct = True
         
     answers = session.get('quiz_answers', {})
     
-    # Initialize the score tracking for this specific question if it's their first drop
+    # 3. Initialize 3-part tracking
     if quiz_id not in answers:
         answers[quiz_id] = {
-            "shutter_score": 0, "aperture_score": 0, 
-            "shutter_locked": False, "aperture_locked": False
+            "shutter_score": 0, "aperture_score": 0, "iso_score": 0,
+            "shutter_locked": False, "aperture_locked": False, "iso_locked": False
         }
     
-    # Failsafe: Ignore if they somehow drop an item for an already locked category
     if answers[quiz_id][f"{category}_locked"]:
         return jsonify({"status": "locked"})
         
-    # Lock the category and assign the point
     answers[quiz_id][f"{category}_locked"] = True
     answers[quiz_id][f"{category}_score"] = 1 if is_correct else 0
     session['quiz_answers'] = answers
     
-    # Check if they have answered BOTH parts of the question
-    question_complete = answers[quiz_id]["shutter_locked"] and answers[quiz_id]["aperture_locked"]
-    both_correct = (answers[quiz_id]["shutter_score"] == 1 and answers[quiz_id]["aperture_score"] == 1)
+    # 4. Check completion of ALL THREE parts
+    question_complete = answers[quiz_id]["shutter_locked"] and answers[quiz_id]["aperture_locked"] and answers[quiz_id]["iso_locked"]
+    all_correct = (answers[quiz_id]["shutter_score"] == 1 and answers[quiz_id]["aperture_score"] == 1 and answers[quiz_id]["iso_score"] == 1)
     
     next_quiz_id = int(quiz_id) + 1
     has_next = str(next_quiz_id) in app_data["quizzes"]
@@ -162,7 +168,7 @@ def process_drop():
         "is_correct": is_correct,
         "category": category,
         "question_complete": question_complete,
-        "both_correct": both_correct,
+        "all_correct": all_correct,
         "success_image": success_image_url, 
         "next_url": next_url
     })
@@ -171,11 +177,10 @@ def process_drop():
 def result():
     answers = session.get('quiz_answers', {})
     
-    # Calculate score by summing both category scores across all questions
-    score = sum(ans.get("shutter_score", 0) + ans.get("aperture_score", 0) for ans in answers.values())
-    total_questions = len(app_data["quizzes"]) * 2
+    # Sum all 3 categories
+    score = sum(ans.get("shutter_score", 0) + ans.get("aperture_score", 0) + ans.get("iso_score", 0) for ans in answers.values())
+    total_questions = len(app_data["quizzes"]) * 3  # 4 questions * 3 parts = 12
     
-    # Calculate Time
     start_time = session.get('quiz_start_time', time.time())
     elapsed_seconds = int(time.time() - start_time)
     q_mins, q_secs = divmod(elapsed_seconds, 60)

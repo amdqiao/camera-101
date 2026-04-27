@@ -9,32 +9,49 @@
       "title": "Aperture",
       "description": "Aperture controls the size of the lens opening. A larger aperture (smaller f-number) captures a blurry background (shallow depth of field).",
       "options": ["f/2.8", "f/4", "f/5.6", "f/8", "f/11", "f/16"]
+    },
+    "3": {
+      "title": "ISO",
+      "description": "ISO measures the sensor's sensitivity to light. A higher ISO brightens the image in dark settings, but introduces visual noise or 'grain'.",
+      "options": ["ISO 400", "ISO 800", "ISO 1600", "ISO 3200", "ISO 6400", "ISO 12800", "ISO 25600"]
     }
   },
   "quizzes": {
     "1": {
-      "question": "Apply the correct settings to freeze the action and blur the background.",
+      "question": "Apply the settings to freeze the action, blur the background, and keep the image clean.",
       "target_image": "cricket_target.jpg",
       "baseline_image": "cricket_baseline.jpg",
       "correct_shutter": "1/1000",
       "correct_aperture": "f/2.8",
-      "draggables": ["1/15", "1/1000", "f/2.8", "f/16"]
+      "correct_iso": "ISO 400",
+      "draggables": ["1/15", "1/1000", "f/2.8", "f/16", "ISO 400", "ISO 25600"]
     },
     "2": {
-      "question": "Apply the settings to capture heavy motion blur but keep the background sharply in focus.",
+      "question": "Capture heavy motion blur, keep the background sharp, and keep the image clean.",
       "target_image": "rogue_target.jpg",
       "baseline_image": "rogue_baseline.jpg",
       "correct_shutter": "1/15",
       "correct_aperture": "f/16",
-      "draggables": ["1/15", "1/1000", "f/2.8", "f/16"]
+      "correct_iso": "ISO 400",
+      "draggables": ["1/15", "1/1000", "f/2.8", "f/16", "ISO 400", "ISO 25600"]
     },
     "3": {
-      "question": "Apply the settings to isolate the subject with an extremely shallow depth of field.",
+      "question": "Isolate the subject with a shallow depth of field, keeping it sharp and clean.",
       "target_image": "perfume_target.jpg",
       "baseline_image": "perfume_baseline.jpg",
       "correct_shutter": "1/250",
       "correct_aperture": "f/2.8",
-      "draggables": ["1/250", "1/15", "f/2.8", "f/16"]
+      "correct_iso": "ISO 400",
+      "draggables": ["1/250", "1/15", "f/2.8", "f/16", "ISO 400", "ISO 25600"]
+    },
+    "4": {
+      "question": "Brighten this dark alleyway to see details, accepting the heavy film grain.",
+      "target_image": "alley_target.jpg",
+      "baseline_image": "alley_baseline.jpg",
+      "correct_shutter": "1/60",
+      "correct_aperture": "f/8",
+      "correct_iso": "ISO 25600",
+      "draggables": ["1/60", "1/1000", "f/2.8", "f/8", "ISO 400", "ISO 25600"]
     }
   }
 }

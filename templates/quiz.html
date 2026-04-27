@@ -19,13 +19,13 @@
     </div>
     
     <div class="col-md-4">
-        <h4 class="text-center mb-4">Settings Dials<br><small class="text-muted fs-6">(Drag 1 Shutter Speed AND 1 Aperture)</small></h4>
+        <h4 class="text-center mb-4">Settings Dials<br><small class="text-muted fs-6">(Drag 1 Shutter Speed, 1 Aperture, & 1 ISO)</small></h4>
         
         <div id="draggable-settings" class="d-flex flex-wrap justify-content-center">
             {% for item in quiz.draggables %}
-                {% set cat = "aperture" if "f/" in item else "shutter" %}
+                {% set cat = "aperture" if "f/" in item else "iso" if "ISO" in item else "shutter" %}
                 
-                <div class="card m-2 p-3 draggable-item text-center bg-light fs-5 shadow-sm cat-{{ cat }}" data-value="{{ item }}" data-category="{{ cat }}" style="cursor: grab; width: 40%;">
+                <div class="card m-1 p-2 draggable-item text-center bg-light fs-6 shadow-sm cat-{{ cat }}" data-value="{{ item }}" data-category="{{ cat }}" style="cursor: grab; width: 45%;">
                     <strong>{{ item }}</strong>
                 </div>
             {% endfor %}
