@@ -1,15 +1,95 @@
+/* ==========================================
+   1. GLOBAL VARIABLES (The Design System)
+   ========================================== */
+:root {
+    /* Color Palette */
+    --color-base: #FF6B35;       /* Vibrant Orange */
+    --color-accent: #E85D04;     /* Deep Orange */
+    --color-dark-grey: #2B2D42;  /* Almost Black for text */
+    --color-light-grey: #EDF2F4; /* Soft background */
+    --color-white: #FFFFFF;      /* Clean White */
+
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+/* ==========================================
+   2. TYPOGRAPHY & BASE STYLES
+   ========================================== */
 body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    color: #2c3e50;
+    background-color: var(--color-light-grey);
+    font-family: var(--font-body);
+    color: var(--color-dark-grey);
+    font-size: 16px;
+    font-weight: 400;
+}
+
+h1, h2, h3, .display-4, .display-5 {
+    font-family: var(--font-heading);
+    color: var(--color-dark-grey);
+    font-weight: 700;
+}
+
+p, .lead, .alert {
+    font-family: var(--font-body);
+    line-height: 1.6;
+}
+
+strong, b {
+    font-weight: 600;
 }
 
 .container {
     max-width: 1000px;
 }
 
+/* ==========================================
+   3. OVERRIDING BOOTSTRAP COLORS
+   ========================================== */
+/* Make "Primary" text our Base Orange */
+.text-primary {
+    color: var(--color-base) !important;
+}
+
+/* Make "Primary" buttons our Base Orange */
+.btn-primary {
+    background-color: var(--color-base) !important;
+    border-color: var(--color-base) !important;
+    color: var(--color-white) !important;
+    font-family: var(--font-body);
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+}
+
+/* Make "Outline Primary" buttons our Base Orange */
+.btn-outline-primary {
+    color: var(--color-base) !important;
+    border-color: var(--color-base) !important;
+    border-width: 2px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary.active {
+    background-color: var(--color-base) !important;
+    color: var(--color-white) !important;
+}
+
+.border-primary {
+    border-color: var(--color-base) !important;
+}
+
+/* ==========================================
+   4. CUSTOM UI COMPONENTS
+   ========================================== */
+/* The Quiz Dropzone */
 #camera-dropzone {
-    background-color: #ffffff;
+    background-color: var(--color-white);
     border: 2px dashed #cbd5e1 !important;
     border-radius: 16px;
     transition: all 0.3s ease;
@@ -17,24 +97,26 @@ body {
 }
 
 #camera-dropzone.ui-droppable-hover {
-    background-color: #f1f8ff;
-    border-color: #3b82f6 !important;
+    background-color: #fff3ed; /* Very faint orange */
+    border-color: var(--color-base) !important;
     transform: scale(1.02);
 }
 
+/* Images */
 #main-camera-image, #learning-image {
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     transition: opacity 0.3s ease;
-    max-height: 450px;
 }
 
+/* Quiz Draggable Cards */
 .draggable-item {
-    background: #ffffff;
+    background: var(--color-white);
     border: 1px solid #e2e8f0;
     border-radius: 12px;
+    font-family: var(--font-body);
     font-weight: 600;
-    color: #475569;
+    color: var(--color-dark-grey);
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     user-select: none;
@@ -43,23 +125,37 @@ body {
 .draggable-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-    border-color: #94a3b8;
+    border-color: var(--color-base);
 }
 
-.btn-outline-primary {
-    border-width: 2px;
-    font-weight: 600;
-    border-radius: 8px;
-}
-
-.alert {
-    border-radius: 12px;
-    border: none;
-}
-
+/* Quiz Category Locking Effect */
 .blurred-option {
     filter: blur(2px);
     opacity: 0.4;
     pointer-events: none !important;
     transition: all 0.3s ease;
+}
+
+/* The Interactive Camera Map Hotspots */
+.camera-hotspot {
+    border: 3px solid transparent;
+    transition: all 0.2s ease-in-out;
+    z-index: 10;
+}
+
+.camera-hotspot:hover {
+    border-color: var(--color-base);
+    background-color: rgba(255, 107, 53, 0.15); /* Faint orange tint */
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.5);
+    cursor: pointer;
+}
+
+/* General Layout Elements */
+.bg-white {
+    background-color: var(--color-white) !important;
+}
+
+.alert {
+    border-radius: 12px;
+    border: none;
 }
