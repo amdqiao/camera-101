@@ -17,41 +17,41 @@
     }
   },
   "quizzes": {
-    "1": {
-      "question": "Apply the settings to freeze the action, blur the background, and keep the image clean.",
-      "target_image": "cricket_target.jpg",
-      "baseline_image": "cricket_baseline.jpg",
-      "correct_shutter": "1/1000",
-      "correct_aperture": "f/2.8",
-      "correct_iso": "ISO 400",
-      "draggables": ["1/15", "1/1000", "f/2.8", "f/16", "ISO 400", "ISO 25600"]
-    },
-    "2": {
-      "question": "Capture heavy motion blur, keep the background sharp, and keep the image clean.",
-      "target_image": "rogue_target.jpg",
-      "baseline_image": "rogue_baseline.jpg",
-      "correct_shutter": "1/15",
-      "correct_aperture": "f/16",
-      "correct_iso": "ISO 400",
-      "draggables": ["1/15", "1/1000", "f/2.8", "f/16", "ISO 400", "ISO 25600"]
-    },
-    "3": {
-      "question": "Isolate the subject with a shallow depth of field, keeping it sharp and clean.",
-      "target_image": "perfume_target.jpg",
-      "baseline_image": "perfume_baseline.jpg",
-      "correct_shutter": "1/250",
-      "correct_aperture": "f/2.8",
-      "correct_iso": "ISO 400",
-      "draggables": ["1/250", "1/15", "f/2.8", "f/16", "ISO 400", "ISO 25600"]
-    },
-    "4": {
-      "question": "Brighten this dark alleyway to see details, accepting the heavy film grain.",
-      "target_image": "alley_target.jpg",
-      "baseline_image": "alley_baseline.jpg",
-      "correct_shutter": "1/60",
-      "correct_aperture": "f/8",
-      "correct_iso": "ISO 25600",
-      "draggables": ["1/60", "1/1000", "f/2.8", "f/8", "ISO 400", "ISO 25600"]
+        "1": {
+            "id": "1",
+            "question": "Scenario 1: The Feline Portrait",
+            "description": "Isolate the orange kitten against the wildflowers by completely blurring the background. Cats twitch unpredictably, so freeze the action entirely. Keep the sensor noise perfectly clean in this bright sunlight.",
+            "base_name": "cat",
+            "correct_shutter": "1/1000",
+            "correct_aperture": "f/2.8",
+            "correct_iso": "ISO 400"
+        },
+        "2": {
+            "id": "2",
+            "question": "Scenario 2: The Studio Product",
+            "description": "Isolate the Aura Botanica bottle from the distracting background using a shallow depth of field. It's a static studio shot, so a standard shutter speed won't blur it. Use moderate ISO to compensate for indoor lighting without ruining it with heavy grain.",
+            "base_name": "perfume",
+            "correct_shutter": "1/60",
+            "correct_aperture": "f/2.8",
+            "correct_iso": "ISO 3200"
+        },
+        "3": {
+            "id": "3",
+            "question": "Scenario 3: The Stadium Delivery",
+            "description": "Capture the fast-paced bowler mid-delivery, but ensure the stadium crowd behind him is also in sharp focus. Freeze the action completely. You will need maximum sensor sensitivity to expose this correctly with such a deep focus.",
+            "base_name": "cricket",
+            "correct_shutter": "1/1000",
+            "correct_aperture": "f/16",
+            "correct_iso": "ISO 25600"
+        },
+        "4": {
+            "id": "4",
+            "question": "Scenario 4: The Heroic Ledge",
+            "description": "The superhero is perched completely still on the ledge. Isolate her from the distracting city skyline by melting the background into a creamy blur. Keep the daylight exposure clean, and use a standard shutter speed since she isn't moving.",
+            "base_name": "hero",
+            "correct_shutter": "1/60",
+            "correct_aperture": "f/2.8",
+            "correct_iso": "ISO 400"
+        }
     }
-  }
 }

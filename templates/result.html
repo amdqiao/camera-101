@@ -1,37 +1,57 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-8 text-center bg-white p-5 rounded shadow-sm border">
-        <h1 class="display-4 fw-bold text-primary">Quiz Complete!</h1>
-        <hr class="my-4">
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 text-center">
         
-        <h2 class="my-3">Your Score: <strong class="text-dark fs-1">{{ score }}</strong> <span class="text-muted">/ {{ total }}</span></h2>
-        <h4 class="mb-4 text-secondary">Quiz Time Elapsed: <span class="fw-bold text-dark">{{ time_taken }}</span></h4>
-        
-        {% if learning_times %}
-        <div class="mt-4 mb-4 text-start bg-light p-4 rounded shadow-sm border">
-            <h5 class="fw-bold text-secondary mb-3">Your Learning Breakdown:</h5>
-            <ul class="list-unstyled mb-0 fs-5">
-                {% for item in learning_times %}
-                    <li class="mb-2">⏱️ You spent <strong>{{ item.time }}</strong> learning <strong>{{ item.title }}</strong>!</li>
+        <h1 class="display-4 text-dark fw-bold mb-3">Shoot Complete.</h1>
+        <p class="lead text-muted mb-4">Here is how you performed in the field.</p>
+
+        <div class="card shadow border-0 rounded-4 overflow-hidden mb-5">
+            <div class="card-body p-5 bg-white position-relative">
+                
+                <h6 class="text-uppercase text-muted fw-bold tracking-wide mb-2">Final Rank</h6>
+                <div class="display-1 fw-bold {{ grade_color }} mb-2" style="font-family: var(--font-heading); text-shadow: 0 4px 15px rgba(0,0,0,0.1); font-size: 6rem;">
+                    {{ grade }}
+                </div>
+                
+                {% if grade == "S" %}
+                    <p class="text-warning fw-bold fs-5">Flawless execution. You are a natural.</p>
+                {% elif grade in ["A", "B"] %}
+                    <p class="text-success fw-bold fs-5">Great work! You know your way around a camera.</p>
+                {% elif grade in ["C", "D"] %}
+                    <p class="text-secondary fw-bold fs-5">Mission accomplished, but there is room for speed improvements.</p>
+                {% else %}
+                    <p class="text-danger fw-bold fs-5">You got the shots, but you missed the deadline. Keep practicing!</p>
+                {% endif %}
+
+                <hr class="my-4 w-75 mx-auto">
+
+                <div class="row text-center mt-4">
+                    
+                    <h5 class="text-muted small text-uppercase">Time on Set</h5>
+                    <p class="fs-4 fw-bold text-dark">{{ time_taken }}</p>
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+        <h4 class="text-start fw-bold mb-3">Training Telemetry</h4>
+        <div class="bg-white rounded shadow-sm border p-4 text-start mb-4">
+            <ul class="list-group list-group-flush fs-6">
+                {% for log in learning_times %}
+                    <li class="list-group-item bg-transparent border-bottom-0 py-2 d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">{{ log.title }} Module</span>
+                        <span class="badge bg-light text-dark border rounded-pill px-3">{{ log.time }}</span>
+                    </li>
+                {% else %}
+                    <li class="list-group-item text-muted">No learning data recorded.</li>
                 {% endfor %}
             </ul>
         </div>
-        {% endif %}
+
+        <a href="/" class="btn btn-outline-primary btn-lg rounded-pill px-5 shadow-sm fw-bold">Return to Base</a>
         
-        {% if score == total %}
-            <div class="alert alert-success fs-4 py-4 shadow-sm border-0 bg-success text-white">
-                🎉 You nailed it! 
-            </div>
-        {% else %}
-            <div class="alert alert-warning fs-4 py-4 shadow-sm border-0">
-                🤔 Think again... feel free to review the lessons to perfect your skills!
-            </div>
-        {% endif %}
-        
-        <div class="mt-5">
-            <a href="/" class="btn btn-outline-primary btn-lg px-5 rounded-pill shadow-sm">Return to Home</a>
-        </div>
     </div>
 </div>
 {% endblock %}

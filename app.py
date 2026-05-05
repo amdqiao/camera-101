@@ -35,11 +35,12 @@ def select():
     if 'visited_lessons' not in session:
         session['visited_lessons'] = []
     
-    # Check if they can take the quiz
+    visited = session['visited_lessons']
     total_lessons = len(app_data["lessons"])
-    all_visited = len(session['visited_lessons']) >= total_lessons
+    all_visited = len(visited) >= total_lessons
     
-    return render_template('select.html', all_visited=all_visited)
+    # Pass 'lessons' and 'visited_lessons' to the template for the checklist
+    return render_template('select.html', all_visited=all_visited, visited_lessons=visited, lessons=app_data["lessons"])
 
 @app.route('/learn/<int:lesson_id>')
 def learn(lesson_id):
@@ -113,79 +114,85 @@ def quiz(quiz_id):
         
     return render_template('quiz.html', quiz=quiz_data, quiz_id=quiz_id)
 
-@app.route('/process_drop', methods=['POST'])
-def process_drop():
+@app.route('/submit_quiz', methods=['POST'])
+def submit_quiz():
+    # 1. Get the data the user just submitted from the dials
     data = request.get_json()
-    quiz_id = str(data['quiz_id'])
-    dropped_item = data['dropped_item']
+    quiz_id = str(data.get('quiz_id'))
     
-    quiz_info = app_data["quizzes"][quiz_id]
+    # 2. Force Python to read the freshest version of our answer key
+    with open('data.json', 'r') as file:
+        app_data = json.load(file)
+        
+    quiz_info = app_data["quizzes"].get(quiz_id)
     
-    # 1. Dynamically determine category
-    if "f/" in dropped_item:
-        category = "aperture"
-    elif "ISO" in dropped_item:
-        category = "iso"
+    # Safety net just in case
+    if not quiz_info:
+        return jsonify({"error": "Quiz not found"}), 404
+
+    # 3. Grade the user's settings against the answer key in data.json
+    user_shutter = data.get('shutter')
+    user_aperture = data.get('aperture')
+    user_iso = data.get('iso')
+    
+    shutter_correct = (user_shutter == quiz_info['correct_shutter'])
+    aperture_correct = (user_aperture == quiz_info['correct_aperture'])
+    iso_correct = (user_iso == quiz_info['correct_iso'])
+    
+    all_correct = shutter_correct and aperture_correct and iso_correct
+
+    # 4. Calculate where they go next (Next question, or the final results page)
+    total_quizzes = len(app_data["quizzes"])
+    if int(quiz_id) < total_quizzes:
+        next_url = f"/quiz/{int(quiz_id) + 1}"
     else:
-        category = "shutter"
         
-    is_correct = False
-    
-    # 2. Validate
-    if category == "aperture" and dropped_item == quiz_info["correct_aperture"]:
-        is_correct = True
-    elif category == "shutter" and dropped_item == quiz_info["correct_shutter"]:
-        is_correct = True
-    elif category == "iso" and dropped_item == quiz_info["correct_iso"]:
-        is_correct = True
-        
-    answers = session.get('quiz_answers', {})
-    
-    # 3. Initialize 3-part tracking
-    if quiz_id not in answers:
-        answers[quiz_id] = {
-            "shutter_score": 0, "aperture_score": 0, "iso_score": 0,
-            "shutter_locked": False, "aperture_locked": False, "iso_locked": False
-        }
-    
-    if answers[quiz_id][f"{category}_locked"]:
-        return jsonify({"status": "locked"})
-        
-    answers[quiz_id][f"{category}_locked"] = True
-    answers[quiz_id][f"{category}_score"] = 1 if is_correct else 0
-    session['quiz_answers'] = answers
-    
-    # 4. Check completion of ALL THREE parts
-    question_complete = answers[quiz_id]["shutter_locked"] and answers[quiz_id]["aperture_locked"] and answers[quiz_id]["iso_locked"]
-    all_correct = (answers[quiz_id]["shutter_score"] == 1 and answers[quiz_id]["aperture_score"] == 1 and answers[quiz_id]["iso_score"] == 1)
-    
-    next_quiz_id = int(quiz_id) + 1
-    has_next = str(next_quiz_id) in app_data["quizzes"]
-    next_url = url_for('quiz', quiz_id=next_quiz_id) if has_next else url_for('result')
-    success_image_url = url_for('static', filename=f'images/{quiz_info["target_image"]}')
-    
+        next_url = "/result" 
+
+    # 5. Send the verdict back to the JavaScript
     return jsonify({
-        "is_correct": is_correct,
-        "category": category,
-        "question_complete": question_complete,
         "all_correct": all_correct,
-        "success_image": success_image_url, 
+        "shutter_feedback": shutter_correct,
+        "aperture_feedback": aperture_correct,
+        "iso_feedback": iso_correct,
         "next_url": next_url
     })
 
 @app.route('/result')
 def result():
     answers = session.get('quiz_answers', {})
-    
-    # Sum all 3 categories
     score = sum(ans.get("shutter_score", 0) + ans.get("aperture_score", 0) + ans.get("iso_score", 0) for ans in answers.values())
-    total_questions = len(app_data["quizzes"]) * 3  # 4 questions * 3 parts = 12
+    total_questions = len(app_data["quizzes"]) * 3 
     
     start_time = session.get('quiz_start_time', time.time())
     elapsed_seconds = int(time.time() - start_time)
+    
+    # Format time string
     q_mins, q_secs = divmod(elapsed_seconds, 60)
     quiz_time_str = f"{q_mins}m {q_secs}s" if q_mins > 0 else f"{q_secs}s"
     
+    # ---------------------------------------------------------
+    # NEW: Competitive Tier Grading Logic (Based on 4 questions)
+    # ---------------------------------------------------------
+    if elapsed_seconds <= 40:     # < 10s per photo
+        grade = "S"
+        grade_color = "text-warning" # Gold
+    elif elapsed_seconds <= 70:   # < 17s per photo
+        grade = "A"
+        grade_color = "text-success"
+    elif elapsed_seconds <= 100:  # < 25s per photo
+        grade = "B"
+        grade_color = "text-primary"
+    elif elapsed_seconds <= 140:  # < 35s per photo
+        grade = "C"
+        grade_color = "text-info"
+    elif elapsed_seconds <= 200:  # < 50s per photo
+        grade = "D"
+        grade_color = "text-secondary"
+    else:
+        grade = "F"
+        grade_color = "text-danger"
+        
     lesson_times_data = []
     if 'lesson_times' in session:
         for lid, seconds in session['lesson_times'].items():
@@ -195,7 +202,7 @@ def result():
                 t_str = f"{l_mins}m {l_secs}s" if l_mins > 0 else f"{l_secs}s"
                 lesson_times_data.append({"title": lesson["title"], "time": t_str})
     
-    return render_template('result.html', score=score, total=total_questions, time_taken=quiz_time_str, learning_times=lesson_times_data)
+    return render_template('result.html', score=score, total=total_questions, time_taken=quiz_time_str, grade=grade, grade_color=grade_color, learning_times=lesson_times_data)
 
 if __name__ == '__main__':
     app.run(debug=True)

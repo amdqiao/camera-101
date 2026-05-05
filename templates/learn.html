@@ -6,7 +6,7 @@
         <p class="text-muted mb-0">{{ lesson.description }}</p>
     </div>
     <div class="col-md-4 text-end">
-        <a href="/select" class="btn btn-outline-secondary shadow-sm">← Back to Camera</a>
+        <a href="/select" class="btn btn-outline-secondary shadow-sm">← Back to Checklist</a>
     </div>
 </div>
 
@@ -16,18 +16,45 @@
     </div>
 
     <div class="col-md-5 d-flex flex-column justify-content-center">
-        <div class="bg-white p-4 rounded shadow-sm border mb-3 text-center">
-            <p class="text-muted small text-uppercase fw-bold mb-2">Physical Dial</p>
-            <img src="{{ url_for('static', filename='images/top_down_camera.jpg') }}" alt="Top Down Camera Dials" class="img-fluid rounded border mb-4" style="max-height: 120px;">
+        
+        <div class="bg-white p-4 rounded shadow-sm border mb-3 text-center position-relative overflow-hidden">
+            <p class="text-muted small text-uppercase fw-bold mb-1">Interactive Interface</p>
+            <p class="small mb-4 text-secondary">Click or drag the setting to adjust the camera.</p>
             
-            <h5 class="mb-3">Test a Setting:</h5>
-            <div class="btn-group shadow-sm flex-wrap w-100" role="group">
-                {% for option in lesson.options %}
-                    <button type="button" class="btn btn-outline-primary setting-btn flex-grow-1" data-value="{{ option }}" data-lesson="{{ lesson_id }}">
-                        {{ option }}
-                    </button>
-                {% endfor %}
-            </div>
+            {% set dynamic_font = "0.8rem" if lesson.options|length > 6 else "1.1rem" %}
+            {% set dynamic_dial_font = "0.8rem" if lesson.options|length > 6 else "1rem" %}
+
+            {% if lesson_id == 2 %}
+                <div class="lens-wrapper mx-auto position-relative" style="max-width: 300px; height: 90px; background: #2B2D42; border-radius: 8px; box-shadow: inset 0px 5px 15px rgba(0,0,0,0.8), 0 5px 10px rgba(0,0,0,0.1); touch-action: none; user-select: none;">
+                    <div class="position-absolute" style="top: 0; left: 50%; transform: translateX(-50%); width: 4px; height: 15px; background: var(--color-base); z-index: 10; border-radius: 0 0 4px 4px;"></div>
+                    
+                    <div id="interactive-ring" class="position-absolute h-100 d-flex align-items-center" style="left: 50%; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); cursor: grab;">
+                        {% for option in lesson.options %}
+                            <div class="ring-mark text-white text-center position-relative" style="width: 80px; flex-shrink: 0;" data-value="{{ option }}" data-lesson="{{ lesson_id }}" data-index="{{ loop.index0 }}">
+                                <div class="fw-bold" style="font-size: {{ dynamic_font }}; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">{{ option }}</div>
+                                <div style="width: 2px; height: 12px; background: rgba(255,255,255,0.5); margin: 5px auto 0;"></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="dial-wrapper mx-auto position-relative" style="width: 220px; height: 220px; touch-action: none; user-select: none;">
+                    <div class="position-absolute" style="top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 15px solid var(--color-base); z-index: 10;"></div>
+                    
+                    <div id="interactive-dial" class="shadow-lg rounded-circle w-100 h-100 position-relative" style="background: radial-gradient(circle, #333 0%, #111 100%); border: 4px solid #444; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 25px rgba(0,0,0,0.3); cursor: grab;" data-options-count="{{ lesson.options|length }}">
+                        
+                        {% set angle_step = 360 / lesson.options|length %}
+                        {% for option in lesson.options %}
+                            <div class="dial-mark position-absolute h-100" style="left: 50%; margin-left: -35px; width: 70px; transform: rotate({{ loop.index0 * angle_step }}deg);" data-value="{{ option }}" data-lesson="{{ lesson_id }}" data-index="{{ loop.index0 }}">
+                                <div class="pt-3 text-white fw-bold" style="font-size: {{ dynamic_dial_font }}; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">{{ option }}</div>
+                                <div style="width: 2px; height: 8px; background: rgba(255,255,255,0.5); margin: 2px auto 0;"></div>
+                            </div>
+                        {% endfor %}
+                        
+                        <div class="position-absolute rounded-circle" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: radial-gradient(circle, #555 0%, #222 100%); border: 2px solid #111;"></div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
         <div id="explanation-box" class="alert alert-info d-none fs-6 shadow-sm mb-4" role="alert"></div>
@@ -36,9 +63,14 @@
             <div class="text-center mt-auto">
                 <a href="/quiz/1" class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm fw-bold">Ready? Take the Quiz!</a>
             </div>
-        {% else %}
-            <div class="alert alert-warning text-center mt-auto small mb-0 shadow-sm border-0">
-                Explore all camera settings from the main menu to unlock the quiz.
+        {% endif %}
+    </div>
+
+        <div id="explanation-box" class="alert alert-info d-none fs-6 shadow-sm mb-4" role="alert"></div>
+
+        {% if all_visited %}
+            <div class="text-center mt-4 mb-2">
+                <a href="/quiz/1" class="btn btn-primary px-5 py-2 rounded-pill shadow-sm fw-bold">Ready? Take the Quiz!</a>
             </div>
         {% endif %}
     </div>
